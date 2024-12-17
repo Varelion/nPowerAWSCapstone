@@ -252,7 +252,7 @@ const Tracker = () => {
 	}, []);
 
 	return (
-		<div >
+		<div className='mt-40' >
 
 
 			<div className="relative z-10 w-full max-w-4xl">
