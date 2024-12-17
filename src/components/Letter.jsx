@@ -36,11 +36,15 @@ function Tracker() {
 		setError(null);
 
 		try {
-			console.log("FORM DATA:\n",
-				"DATE_STAMP\n",formData.DATE_STAMP,
-				"Letter_Content\n",formData.Letter_Content,
-				"Letter_ID\n",formData.Letter_ID
-			 )
+			console.log(
+				'FORM DATA:\n',
+				'DATE_STAMP\n',
+				formData.DATE_STAMP,
+				'Letter_Content\n',
+				formData.Letter_Content,
+				'Letter_ID\n',
+				formData.Letter_ID
+			);
 			const response = await fetch('https://your-api-endpoint.com/data', {
 				method: 'POST',
 				headers: {
@@ -73,8 +77,6 @@ function Tracker() {
 	return (
 		<div className="min-h-[50vh] min-w-screen flex items-center justify-center p-6 text-white">
 			<div className="w-full min-h-[20vh] flex flex-col justify-center max-w-2xl bg-[#222b45] shadow-2xl rounded-3xl border-4 border-[#2df5ff] p-8 relative overflow-hidden">
-
-
 				<div className="text-center mb-8 relative z-10">
 					<h1 className="text-4xl font-extrabold text-transparent bg-clip-text bg-gradient-to-r from-[#2ecc71] to-[#34b1db] mb-4">
 						🎄 Santa's Secret Mailbox ❄️

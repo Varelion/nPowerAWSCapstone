@@ -37,9 +37,6 @@ function Home() {
 	return (
 		<>
 			<div className="card mt-40">
-				{/* Uncomment below to enable increment and decrement */}
-				{/* <button onClick={() => dispatch(increment())}>Increment</button>
-        <button onClick={() => dispatch(decrement())}>Decrement</button> */}
 				<p className="absolute top-40 left-1/2 transform -translate-x-1/2">
 					Letters Delivered:{' '}
 					{loading ? 'Loading...' : localizedInteger()}

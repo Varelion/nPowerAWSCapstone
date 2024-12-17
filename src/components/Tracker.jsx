@@ -252,9 +252,7 @@ const Tracker = () => {
 	}, []);
 
 	return (
-		<div className='mt-40' >
-
-
+		<div className="mt-40">
 			<div className="relative z-10 w-full max-w-4xl">
 				<h2 className="text-4xl font-extrabold text-transparent bg-clip-text bg-gradient-to-r from-[#2ecc71] to-[#3498db] text-center mb-6">
 					🎄 Santa Tracker 🌍
