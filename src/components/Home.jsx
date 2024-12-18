@@ -36,6 +36,10 @@ function Home() {
 		isOpen ? setIsOpen(false) : setIsOpen(true);
 	}
 
+	const handleDelete = (key) =>{
+		setItems(items.filter(item => item.id!=key))
+	}
+
 	useEffect(() => {
 		dispatch(fetchExampleData());
 	}, [count, dispatch]);
@@ -191,8 +195,8 @@ function Home() {
 					{isOpen
 						? items.map((letter, key) => {
 								return (
-									<div className="mb-8" key={key}>
-										<ul>
+									<div className="mb-8" key={letter['id']}>
+										<ul className='relative'>
 											<li>
 												{' '}
 												{key == 0 ? <hr /> : null}
@@ -202,6 +206,14 @@ function Home() {
 												<strong>
 													Letter Was Sent On:{' '}
 												</strong>{' '}
+												<button
+													className="mx-0 my-0 py-0 px-3 transition duration-300 from m-8 p-4 bg-slate-600 text-white rounded-full ease-in-out hover:bg-slate-900 hover:text-[#00ffff] hover:underline hover:scale:180 shadow-md shadow-white hover:shadow-inner hover:shadow-[#00FF99] absolute right-5 "
+													onMouseUp={() =>
+														handleDelete(letter.id)
+													}
+												>
+													x
+												</button>
 												<p className="pl-[4em] pb-4">
 													{letter['date']}
 												</p>
