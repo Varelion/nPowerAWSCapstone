@@ -3,7 +3,7 @@ import { v4 as uuidv4 } from 'uuid';
 
 function Tracker() {
 	const [formData, setFormData] = useState({
-		Letter_ID: uuidv4(),
+		Letter_ID: '',
 		Letter_Content: '',
 		DATE_STAMP: Date.now()
 	});
@@ -36,22 +36,20 @@ function Tracker() {
 		setError(null);
 
 		try {
-			console.log(
-				'FORM DATA:\n',
-				'DATE_STAMP\n',
-				formData.DATE_STAMP,
-				'Letter_Content\n',
-				formData.Letter_Content,
-				'Letter_ID\n',
-				formData.Letter_ID
+			console.log({ formData });
+			formData.Letter_ID = uuidv4();
+			const response = await fetch(
+				'https://en8wzmrqp0.execute-api.us-east-1.amazonaws.com/SANTA-STAGE/SantaLetter',
+				{
+					method: 'POST',
+					headers: {
+						'Content-Type': 'application/json'
+					},
+					body: JSON.stringify(formData)
+				}
 			);
-			const response = await fetch('https://your-api-endpoint.com/data', {
-				method: 'POST',
-				headers: {
-					'Content-Type': 'application/json'
-				},
-				body: JSON.stringify(formData)
-			});
+
+			console.log(response);
 
 			if (!response.ok) {
 				const errorData = await response.json();
@@ -66,6 +64,11 @@ function Tracker() {
 				Letter_Content: '',
 				DATE_STAMP: Date.now()
 			});
+			let subBut = document.getElementById('submit-letter-button');
+			subBut.textContent = 'LETTER SENT!';
+			setTimeout(() => {
+				subBut.textContent = 'Send another?';
+			}, 3000);
 			setFocused(false);
 		} catch (error) {
 			setError(error.message);
@@ -128,6 +131,7 @@ function Tracker() {
 					</div>
 					<div className="flex justify-center">
 						<button
+							id="submit-letter-button"
 							type="submit"
 							disabled={loading}
 							className="

@@ -1,38 +1,94 @@
 import React, { useEffect, useState } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
-import { increment, decrement } from '../store/slices/exampleSlice'; // Import slice actions
+import { fetchExampleData } from '../store/slices/exampleSlice'; // Import slice actions
+import { format } from 'date-fns';
 
 function Home() {
 	const count = useSelector((state) => state.example.value); // Get the value from Redux state
-	const [APICount, setAPICount] = useState(0); // Default value set to 0
+	const allLetters = useSelector((state) => state.example.letters); // Get the value from Redux state
 	const dispatch = useDispatch(); // Access the dispatch function
 	const [loading, setLoading] = useState(true);
+	const [isOpen, setIsOpen] = useState(false);
+	const [items, setItems] = useState([])
 
 	// Function to localize the combined count
 	const localizedInteger = () => {
-		let theLocalizedInt = count + APICount;
+		let theLocalizedInt = count + 0;
 		let toReturn = theLocalizedInt.toLocaleString(); // Localize the number
 		return toReturn;
 	};
 
+	const dateGetter = (x) => {
+		const date = new Date(x);
+
+		const year = date.getFullYear();
+		const month = String(date.getMonth() + 1).padStart(2, '0');
+		const day = String(date.getDate()).padStart(2, '0');
+		const hours = String(date.getHours()).padStart(2, '0');
+		const minutes = String(date.getMinutes()).padStart(2, '0');
+		const seconds = String(date.getSeconds()).padStart(2, '0');
+
+		const formattedDate = `${year}-${month}-${day} ${hours}:${minutes}:${seconds}`;
+		return formattedDate;
+	};
+
+	const handleClick = () => {
+		isOpen ? setIsOpen(false) : setIsOpen(true);
+	}
+
 	useEffect(() => {
-		const fetchCount = async () => {
-			try {
-				const response = await fetch(
-					'https://www.random.org/integers/?num=1&min=100&max=1000&col=1&base=10&format=plain&rnd=new'
-				); // API for random number
+		dispatch(fetchExampleData());
+	}, [count, dispatch]);
 
-				const data = await response.text();
-				setAPICount(Number(data.trim())); // Parse the response to a number and update state
-			} catch (error) {
-				console.error('Error fetching count:', error);
-			} finally {
-				setLoading(false); // Set loading to false after data fetch
+	useEffect(() => {
+		count > 0 ? setLoading(false) : null;
+	}, [count]);
+	useEffect(() => {
+		const x = allLetters.map((letter)=>{
+			const formatedLetter = {
+				"id": letter.Letter_ID,
+				"text": letter.Letter_Content,
+				"date": dateGetter(letter.DATE_STAMP)
 			}
-		};
+			return formatedLetter;
+		});
+		setItems(x)
+	}, [allLetters]);
 
-		fetchCount();
-	}, []);
+	// Commented out because I decided to use the store for this.
+	// useEffect(() => {
+	//     const fetchCount = async () => {
+	//         try {
+	//             const response = await fetch(
+	// 				'https://en8wzmrqp0.execute-api.us-east-1.amazonaws.com/status/status',
+	// 				{
+	// 					method: 'GET'
+	// 				}
+	// 			);
+
+	//             if (!response.ok) {
+	//                 throw new Error(`HTTP error! status: ${response.status}`);
+	//             }
+
+	//             const data = await response.json();
+
+	//             setAPICount(data);
+
+	//             // If you want to update the DOM element
+	//             let x = document.getElementById('box-holder');
+	//             if (x) {
+	//                 x.textContent = JSON.stringify(data);
+	//             }
+	//         } catch (error) {
+	//             console.error('Error fetching count:', error);
+	//             setAPICount(0); // Set a default value on error
+	//         } finally {
+	//             setLoading(false);
+	//         }
+	//     };
+
+	//     fetchCount();
+	// }, []);
 
 	return (
 		<>
@@ -77,21 +133,33 @@ function Home() {
 				</p>
 				<br />
 			</div>
-			<div className="pt-20 flex items-center justify-center flex-col absolute top-1/2 left-1/2 -translate-x-1/2 translate-y-1/4 text-3xl">
-				<h2>
+			<div className=" flex items-center justify-center flex-col text-3xl">
+				<h2 className="mb-10">
 					<b>
 						<i>Anyway... </i>
 					</b>
 					Would you like to...
 				</h2>
 				<ul className="flex flex-row justify-around flex-nowrap p-6">
-					<li>
+					<li className="">
 						<a
 							href="/letter"
 							className=" transition duration-300 from m-8 p-4 bg-slate-600 text-white rounded-lg ease-in-out hover:bg-slate-900 hover:text-[#00ffff] hover:underline hover:scale:180 shadow-md shadow-white hover:shadow-inner hover:shadow-[#00FF99]"
 						>
 							Send Letter
 						</a>
+					</li>
+					<li>
+						<button
+							onMouseUp={loading ? null : () => handleClick()}
+							className={
+								loading
+									? ' transition duration-1000 from m-8 p-4 bg-slate-600 text-white rounded-lg ease-in-out hover:bg-slate-900 hover:text-[#00ffff] hover:underline hover:scale:180 shadow-md shadow-white hover:shadow-inner hover:shadow-[#00FF99]'
+									: ' transition duration-1000 from m-8 p-4 bg-red-600 text-black rounded-lg ease-in-out hover:bg-red-900 hover:text-[#000000] hover:underline hover:scale:180 shadow-md shadow-black hover:shadow-inner hover:shadow-[#000000]'
+							}
+						>
+							{loading ? 'Loading...' : 'Read All Letters'}
+						</button>
 					</li>
 					<li>
 						<a
@@ -102,6 +170,61 @@ function Home() {
 						</a>
 					</li>
 				</ul>
+				<div
+					id="box-holder"
+					className=" bg-red- text-white text-left overflow-auto relative"
+				>
+					{' '}
+					{isOpen ? (
+						<div className="flex justify-end ">
+							<button
+								className=" right-0   py-4 px-1 m-6 text-3xl rounded-xl  transition duration-300 from m-8 p-4 bg-slate-600 text-white rounded-lg ease-in-out hover:bg-slate-900 hover:text-[#00ffff] hover:underline hover:scale:180 shadow-md shadow-white hover:shadow-inner hover:shadow-[#00FF99]"
+								onMouseUp={() => handleClick()}
+							>
+								「X」
+							</button>
+						</div>
+					) : null}
+					{/* <AllLetters open={isOpen} onClose={() => setIsOpen(false)}>
+						"TEST"
+					</AllLetters> */}
+					{isOpen
+						? items.map((letter, key) => {
+								return (
+									<div className="mb-8" key={key}>
+										<ul>
+											<li>
+												{' '}
+												{key == 0 ? <hr /> : null}
+												{key == 0 ? (
+													<p className="mt-8" />
+												) : null}
+												<strong>
+													Letter Was Sent On:{' '}
+												</strong>{' '}
+												<p className="pl-[4em] pb-4">
+													{letter['date']}
+												</p>
+											</li>
+											<li>
+												<strong>Letter ID: </strong>{' '}
+												<p className="pl-[4em] pb-4">
+													{letter['id']}
+												</p>
+											</li>
+											<li>
+												<strong>Letter Content:</strong>
+												<p className="mb-8 pl-[4em] ">
+													{letter['text']}
+												</p>
+												<hr />
+											</li>
+										</ul>
+									</div>
+								);
+						  })
+						: null}
+				</div>
 			</div>
 		</>
 	);
