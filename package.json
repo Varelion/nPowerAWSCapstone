@@ -6,13 +6,13 @@
 	"version": "0.0.0",
 	"type": "module",
 	"scripts": {
-  "predeploy": "npm run build",
-  "deploy": "gh-pages -d dist",
-  "start": "vite",
-  "build": "vite build",
-  "test": "vite test",
-  "eject": "vite eject"
-},
+		"predeploy": "npm run build",
+		"deploy": "gh-pages -d dist",
+		"start": "vite",
+		"build": "vite build",
+		"test": "vite test",
+		"eject": "vite eject"
+	},
 	"dependencies": {
 		"@reduxjs/toolkit": "^2.5.0",
 		"autoprefixer": "^10.4.20",
