@@ -36,8 +36,27 @@ function Home() {
 		isOpen ? setIsOpen(false) : setIsOpen(true);
 	}
 
+	const deleteOnline = async (key) => {
+		try {
+			const response = await fetch(
+				`https://en8wzmrqp0.execute-api.us-east-1.amazonaws.com/DELETE/SantaLetter?Letter_ID=${key}`,
+				{
+					method: 'DELETE',
+					headers: {
+						'Content-Type': 'application/json'
+					}
+				}
+			);
+			data = await response.text();
+			console.log(data)
+		} catch(e){
+		console.log("Deletion error", e)
+		}
+	}
+
 	const handleDelete = (key) =>{
 		setItems(items.filter(item => item.id!=key))
+		deleteOnline(key);
 	}
 
 	useEffect(() => {
@@ -103,7 +122,7 @@ function Home() {
 				</p>
 			</div>
 			<div className="h-full w-full mt-2">
-				<h1 className="m-8 -mt-20 mb-10 udnerline">
+				<h1 className="m-8 -mt-20 mb-10 underline">
 					「Saint Nicholas' Webpage」
 				</h1>
 				<div className="hover:text-red-700 ease-in-out duration-1000">
@@ -182,7 +201,7 @@ function Home() {
 					{isOpen ? (
 						<div className="flex justify-end ">
 							<button
-								className=" right-0   py-4 px-1 m-6 text-3xl rounded-xl  transition duration-300 from m-8 p-4 bg-slate-600 text-white rounded-lg ease-in-out hover:bg-slate-900 hover:text-[#00ffff] hover:underline hover:scale:180 shadow-md shadow-white hover:shadow-inner hover:shadow-[#00FF99]"
+								className=" right-0   py-4 px-1  text-3xl  transition duration-300 from m-8 p-4 bg-slate-600 text-white rounded-lg ease-in-out hover:bg-slate-900 hover:text-[#00ffff]  hover:scale:180 shadow-md shadow-white hover:shadow-inner hover:shadow-[#00FF99]"
 								onMouseUp={() => handleClick()}
 							>
 								「X」
@@ -207,7 +226,7 @@ function Home() {
 													Letter Was Sent On:{' '}
 												</strong>{' '}
 												<button
-													className="mx-0 my-0 py-0 px-3 transition duration-300 from m-8 p-4 bg-slate-600 text-white rounded-full ease-in-out hover:bg-slate-900 hover:text-[#00ffff] hover:underline hover:scale:180 shadow-md shadow-white hover:shadow-inner hover:shadow-[#00FF99] absolute right-5 "
+													className="mx-0 my-0 py-0 px-3 transition duration-300 from m-8 p-4 bg-slate-600 text-white rounded-full ease-in-out hover:bg-slate-900 hover:text-[#00ffff]  hover:scale:180 shadow-md shadow-white hover:shadow-inner hover:shadow-[#00FF99] absolute right-5 "
 													onMouseUp={() =>
 														handleDelete(letter.id)
 													}

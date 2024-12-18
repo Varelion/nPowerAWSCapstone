@@ -36,10 +36,9 @@ function Tracker() {
 		setError(null);
 
 		try {
-			console.log({ formData });
 			formData.Letter_ID = uuidv4();
 			const response = await fetch(
-				'https://en8wzmrqp0.execute-api.us-east-1.amazonaws.com/SANTA-STAGE/SantaLetter',
+				'https://en8wzmrqp0.execute-api.us-east-1.amazonaws.com/DELETE/SantaLetter',
 				{
 					method: 'POST',
 					headers: {
