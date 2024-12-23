@@ -178,7 +178,7 @@ function Home() {
 							className={
 								loading
 									? ' transition duration-1000 from m-8 p-4 bg-slate-600 text-white rounded-lg ease-in-out hover:bg-slate-900 hover:text-[#00ffff] hover:underline hover:scale:180 shadow-md shadow-white hover:shadow-inner hover:shadow-[#00FF99]'
-									: ' transition duration-1000 from m-8 p-4 bg-red-600 text-black rounded-lg ease-in-out hover:bg-red-900 hover:text-[#000000] hover:underline hover:scale:180 shadow-md shadow-black hover:shadow-inner hover:shadow-[#000000]'
+									: ' transition duration-1000 from m-8 p-4 bg-red-600 text-black rounded-lg ease-in-out hover:bg-black hover:text-[#ff0000] hover:underline hover:scale:180 shadow-md shadow-black hover:shadow-inner hover:shadow-[#000000]'
 							}
 						>
 							{loading ? 'Loading...' : 'Read All Letters'}
